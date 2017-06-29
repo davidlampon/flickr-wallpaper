@@ -58,7 +58,7 @@ typings/
 .env
 
 # config file
-config.js
+config_template.js
 
 #pictures
 lr-latest.widget/

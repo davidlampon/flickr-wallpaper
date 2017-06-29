@@ -40,16 +40,11 @@ const getWallpaper = () => {
         .on('error', (err) => {
           console.log(err);
         })
-        .pipe(
-        fs.createWriteStream(
-          `${PLUGIN_FOLDER}/wallpaper.${photo.originalformat}`,
-        ),
-      );
+        .pipe(fs.createWriteStream(`${PLUGIN_FOLDER}/wallpaper.${photo.originalformat}`));
     },
     (err) => {
       console.log(err);
-    },
-  );
+    });
 };
 
 const getPictures = () => {
@@ -90,8 +85,7 @@ const getPictures = () => {
     },
     (err) => {
       console.log(err);
-    },
-  );
+    });
 };
 
 const init = () => {

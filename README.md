@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/davidlampon/flickr-wallpaper.svg?branch=master)](https://travis-ci.org/davidlampon/flickr-wallpaper)
+[![Coverage Status](https://coveralls.io/repos/github/davidlampon/flickr-wallpaper/badge.svg?branch=master)](https://coveralls.io/github/davidlampon/flickr-wallpaper?branch=master)
+
 Flickr Wallpaper
 =========
 

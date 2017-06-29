@@ -1,0 +1,42 @@
+{
+  "name": "flickr-wallpaper",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec || true",
+    "lint": "eslint ./ --cache --ignore-pattern .gitignore",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
+  },
+  "pre-commit": [ "precommit-msg", "lint", "test" ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidlampon/flickr-wallpaper.git"
+  },
+  "author": "“David <“david.lampon@gmail.com”>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidlampon/flickr-wallpaper/issues"
+  },
+  "homepage": "https://github.com/davidlampon/flickr-wallpaper#readme",
+  "engines": {
+    "node": ">=4.2.4"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-jsx-a11y": "^5.1.0",
+    "eslint-plugin-react": "^7.1.0",
+    "mocha": "^3.4.2",
+    "pre-commit": "^1.2.2"
+  },
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "eslint-config-airbnb": "^15.0.1",
+    "flickr-sdk": "1.2.2",
+    "fs": "0.0.1-security",
+    "request": "^2.81.0"
+  }
+}

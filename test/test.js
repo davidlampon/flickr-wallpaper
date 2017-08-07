@@ -53,6 +53,10 @@ describe('#flickrInterface', () => {
     expect(flickrInterface).to.be.an('object');
   });
 
+  it('should have a _createFolder method', () => {
+    expect(flickrInterface).to.have.own.property('_createFolder');
+  });
+
   it('should have a _saveWallpaper method', () => {
     expect(flickrInterface).to.have.own.property('_saveWallpaper');
   });

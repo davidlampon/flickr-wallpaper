@@ -20,7 +20,14 @@ let photo;
 let url;
 let index;
 
+const _createFolder = () => {
+  if (!fs.existsSync(`./${PLUGIN_FOLDER}`)){
+      fs.mkdirSync(`./${PLUGIN_FOLDER}`);
+  }
+};
+
 const _saveWallpaper = (response) => {
+  _createFolder();
   responsePhoto = response.body.photoset.photo;
   photo = responsePhoto[Math.floor(Math.random() * responsePhoto.length)];
   url = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.originalsecret}_o.${photo.originalformat}`;
@@ -50,6 +57,8 @@ const getWallpaper = () => {
 const _savePictures = (response) => {  
   let tags = config.tags;
   responsePhoto = response.body.photos.photo;
+
+  _createFolder();
 
   for (let i = 0; i < responsePhoto.length && tags.length; i += 1) {
     photo = responsePhoto[i];
@@ -94,6 +103,7 @@ const init = () => {
 init();
 
 module.exports = {
+  _createFolder,
   _saveWallpaper,
   _savePictures,
   _retrieveWallpaper,

@@ -20,72 +20,70 @@ let photo;
 let url;
 let index;
 
-const getWallpaper = () => {
-  randomAlbum = config.wallpapers[Math.floor(Math.random() * config.wallpapers.length)];
+const _saveWallpaper = (response) => {
+  responsePhoto = response.body.photoset.photo;
+  photo = responsePhoto[Math.floor(Math.random() * responsePhoto.length)];
+  url = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.originalsecret}_o.${photo.originalformat}`;
+  request(url).pipe(fs.createWriteStream(`${PLUGIN_FOLDER}/wallpaper.${photo.originalformat}`));
+};
 
-  flickr
+const _processWallpaper = (promise) => {
+  promise
+    .then(_saveWallpaper);
+};
+
+const _retrieveWallpaper = (randomAlbum) => {    
+  return flickr
     .request()
     .albums(randomAlbum)
     .media()
     .get({
       extras: 'original_format',
-    })
-    .then((response) => {
-      responsePhoto = response.body.photoset.photo;
-      photo = responsePhoto[Math.floor(Math.random() * responsePhoto.length)];
-      url = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.originalsecret}_o.${photo.originalformat}`;
-
-      request
-        .get(url)
-        .on('error', (err) => {
-          console.log(err);
-        })
-        .pipe(fs.createWriteStream(`${PLUGIN_FOLDER}/wallpaper.${photo.originalformat}`));
-    },
-    (err) => {
-      console.log(err);
-    });
+    });   
 };
 
-const getPictures = () => {
-  const tags = config.tags;
+const getWallpaper = () => {
+  randomAlbum = config.wallpapers[Math.floor(Math.random() * config.wallpapers.length)];
+  _processWallpaper(_retrieveWallpaper(randomAlbum)); 
+};
 
-  randomAlbum =
-    config.galleries[Math.floor(Math.random() * config.galleries.length)];
+const _savePictures = (response) => {  
+  let tags = config.tags;
+  responsePhoto = response.body.photos.photo;
 
-  flickr
+  for (let i = 0; i < responsePhoto.length && tags.length; i += 1) {
+    photo = responsePhoto[i];
+    index = config.tags.indexOf(photo.tags);
+
+    if (photo.tags && index > -1) {
+      url = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_z.jpg`;
+      request(url).pipe(fs.createWriteStream(`${PLUGIN_FOLDER}/${photo.tags}.jpg`));
+      tags.splice(index, 1);
+    }
+  }
+};
+
+const _processPictures = (promise) => {
+  promise
+    .then(_savePictures);
+};
+
+const _retrievePictures = () => {    
+  return flickr
     .request()
     .people(config.personalId)
     .media()
     .get({
       media: 'photos',
-      tags: tags.join(),
+      tags: config.tags.join(),
       sort: 'date-taken-desc',
       extras: 'tags, date_taken, date_upload',
-    })
-    .then((response) => {
-      responsePhoto = response.body.photos.photo;
-      for (let i = 0; i < responsePhoto.length && tags.length; i += 1) {
-        photo = responsePhoto[i];
-        index = tags.indexOf(photo.tags);
-
-        if (photo.tags && index > -1) {
-          url = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_z.jpg`;
-
-          request
-            .get(url)
-            .on('error', (err) => {
-              console.log(err);
-            })
-            .pipe(fs.createWriteStream(`${PLUGIN_FOLDER}/${photo.tags}.jpg`));
-
-          tags.splice(index, 1);
-        }
-      }
-    },
-    (err) => {
-      console.log(err);
     });
+};
+
+const getPictures = () => {
+  // randomAlbum = config.galleries[Math.floor(Math.random() * config.galleries.length)];  
+  _processPictures(_retrievePictures());
 };
 
 const init = () => {
@@ -95,8 +93,12 @@ const init = () => {
 
 init();
 
-
 module.exports = {
-  getPictures,
+  _saveWallpaper,
+  _savePictures,
+  _retrieveWallpaper,
+  _retrievePictures,
   getWallpaper,
+  getPictures,
+  
 };

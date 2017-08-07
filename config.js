@@ -1,7 +1,10 @@
 module.exports = {
   flickr: {
-    apiKey: '',
-    apiSecret: '',
+    // Flickr Desktop Application 
+    apiKey: '0f5fd7e8d3e92e80c3492b55ec33d3c5',
+    apiSecret: '6f024a284df5884b',
+    
+    // User tokens (only needed for access to personal private photos)
     accessToken: '',
     accessTokenSecret: '',
   },
